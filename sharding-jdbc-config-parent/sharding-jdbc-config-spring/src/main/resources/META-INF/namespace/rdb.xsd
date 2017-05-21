@@ -71,6 +71,7 @@
             <xsd:attribute name="sharding-columns" type="xsd:string" use="required" />
             <xsd:attribute name="algorithm-expression" type="xsd:string" use="optional" />
             <xsd:attribute name="algorithm-class" type="xsd:string" use="optional" />
+            <xsd:attribute name="algorithm-ref" type="xsd:string" use="optional"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="default-table-strategy">
@@ -78,6 +79,7 @@
             <xsd:attribute name="sharding-columns" type="xsd:string" use="required" />
             <xsd:attribute name="algorithm-expression" type="xsd:string" use="optional" />
             <xsd:attribute name="algorithm-class" type="xsd:string" use="optional" />
+            <xsd:attribute name="algorithm-ref" type="xsd:string" use="optional"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="strategy">
@@ -86,6 +88,7 @@
             <xsd:attribute name="sharding-columns" type="xsd:string" use="required" />
             <xsd:attribute name="algorithm-expression" type="xsd:string" use="optional" />
             <xsd:attribute name="algorithm-class" type="xsd:string" use="optional" />
+            <xsd:attribute name="algorithm-ref" type="xsd:string" use="optional"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="props">

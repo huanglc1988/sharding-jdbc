@@ -33,4 +33,6 @@ public final class ShardingJdbcStrategyBeanDefinitionParserTag {
     public static final String ALGORITHM_CLASS_ATTRIBUTE = "algorithm-class";
     
     public static final String ALGORITHM_EXPRESSION_ATTRIBUTE = "algorithm-expression";
+
+    public static final String ALGORITHM_REF_ATTRIBUTE = "algorithm-ref";
 }

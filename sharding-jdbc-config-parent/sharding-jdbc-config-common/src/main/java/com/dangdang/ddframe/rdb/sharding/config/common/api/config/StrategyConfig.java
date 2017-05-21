@@ -17,6 +17,7 @@
 
 package com.dangdang.ddframe.rdb.sharding.config.common.api.config;
 
+import com.dangdang.ddframe.rdb.sharding.router.strategy.ShardingAlgorithm;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,4 +35,6 @@ public class StrategyConfig {
     private String algorithmClassName;
     
     private String algorithmExpression;
+
+    private ShardingAlgorithm algorithmRef;
 }

@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 import com.dangdang.ddframe.rdb.sharding.config.common.api.config.StrategyConfig;
 import com.dangdang.ddframe.rdb.sharding.spring.namespace.constants.ShardingJdbcStrategyBeanDefinitionParserTag;
 import lombok.AccessLevel;
+import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
@@ -38,6 +39,10 @@ public class ShardingJdbcStrategyBeanDefinition {
         factory.addPropertyValue("shardingColumns", element.getAttribute(ShardingJdbcStrategyBeanDefinitionParserTag.SHARDING_COLUMNS_ATTRIBUTE));
         factory.addPropertyValue("algorithmClassName", element.getAttribute(ShardingJdbcStrategyBeanDefinitionParserTag.ALGORITHM_CLASS_ATTRIBUTE));
         factory.addPropertyValue("algorithmExpression", element.getAttribute(ShardingJdbcStrategyBeanDefinitionParserTag.ALGORITHM_EXPRESSION_ATTRIBUTE));
+        String algorithmRefName = element.getAttribute(ShardingJdbcStrategyBeanDefinitionParserTag.ALGORITHM_REF_ATTRIBUTE);
+        if(algorithmRefName != null && algorithmRefName.length()>0){
+            factory.addPropertyValue("algorithmRef",new RuntimeBeanReference(algorithmRefName));
+        }
         return factory.getBeanDefinition();
     }
 }

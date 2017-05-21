@@ -162,6 +162,9 @@ public final class ShardingRuleBuilder {
                 || !Strings.isNullOrEmpty(config.getAlgorithmExpression()) && Strings.isNullOrEmpty(config.getAlgorithmClassName()));
         Preconditions.checkState(returnClass.isAssignableFrom(DatabaseShardingStrategy.class) || returnClass.isAssignableFrom(TableShardingStrategy.class), "Sharding-JDBC: returnClass is illegal");
         List<String> shardingColumns = new InlineParser(config.getShardingColumns()).split();
+        if(config.getAlgorithmRef() != null){
+            return buildShardingAlgorithmRef(shardingColumns,config.getAlgorithmRef(),returnClass);
+        }
         if (Strings.isNullOrEmpty(config.getAlgorithmClassName())) {
             return buildShardingAlgorithmExpression(shardingColumns, config.getAlgorithmExpression(), returnClass);
         }
@@ -191,7 +194,18 @@ public final class ShardingRuleBuilder {
         return returnClass.isAssignableFrom(DatabaseShardingStrategy.class) ? (T) new DatabaseShardingStrategy(shardingColumns, (MultipleKeysDatabaseShardingAlgorithm) shardingAlgorithm) 
                 : (T) new TableShardingStrategy(shardingColumns, (MultipleKeysTableShardingAlgorithm) shardingAlgorithm);
     }
-    
+
+    private <T extends ShardingStrategy> T buildShardingAlgorithmRef(final List<String> shardingColumns, final ShardingAlgorithm shardingAlgorithm, final Class<T> returnClass) {
+        Preconditions.checkState(shardingAlgorithm instanceof SingleKeyShardingAlgorithm || shardingAlgorithm instanceof MultipleKeysShardingAlgorithm, "Sharding-JDBC: algorithmClassName is illegal");
+        if (shardingAlgorithm instanceof SingleKeyShardingAlgorithm) {
+            Preconditions.checkArgument(1 == shardingColumns.size(), "Sharding-JDBC: SingleKeyShardingAlgorithm must have only ONE sharding column");
+            return returnClass.isAssignableFrom(DatabaseShardingStrategy.class) ? (T) new DatabaseShardingStrategy(shardingColumns.get(0), (SingleKeyDatabaseShardingAlgorithm<?>) shardingAlgorithm)
+                    : (T) new TableShardingStrategy(shardingColumns.get(0), (SingleKeyTableShardingAlgorithm<?>) shardingAlgorithm);
+        }
+        return returnClass.isAssignableFrom(DatabaseShardingStrategy.class) ? (T) new DatabaseShardingStrategy(shardingColumns, (MultipleKeysDatabaseShardingAlgorithm) shardingAlgorithm)
+                : (T) new TableShardingStrategy(shardingColumns, (MultipleKeysTableShardingAlgorithm) shardingAlgorithm);
+    }
+
     @SuppressWarnings("unchecked")
     private <T> Class<? extends T> loadClass(final String className, final Class<T> superClass) {
         try {
